@@ -1,0 +1,595 @@
+/* =========================================
+   1. Переменные и сброс (Reset)
+   ========================================= */
+:root {
+  /* Точные цвета из макета Cat Energy */
+  --color-primary: #68B738;
+  --color-primary-hover: #5EAA2F;
+  --color-text: #000000;       /* В макете заголовки часто чисто черные */
+  --color-text-light: #444444;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F2F2F2;
+  --color-bg-dark: #333333;    /* Для футера или акцентов */
+  
+  --font-heading: 'Oswald', sans-serif;
+  --font-body: 'Roboto', 'Arial', sans-serif;
+  
+  --container-width: 1200px;
+  --gap: 20px;
+  --border-radius: 0px; /* В оригинальном макете Cat Energy углы обычно прямые, измени на 8px, если в твоем макете они скруглены */
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* Плавная прокрутка к якорям */
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+ul {
+  list-style: none;
+}
+
+/* =========================================
+   2. Утилиты и базовые классы
+   ========================================= */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--gap);
+}
+
+.section {
+  padding: 60px 0;
+}
+
+.section__title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.button {
+  display: inline-block;
+  padding: 16px 24px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button--primary {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.button--primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* =========================================
+   3. Header
+   ========================================= */
+.header {
+  background-color: var(--color-bg);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav__list {
+  display: flex;
+  gap: 30px;
+}
+
+.nav__link {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.nav__link:hover {
+  color: var(--color-primary);
+}
+
+/* =========================================
+   4. Hero (Главный экран)
+   ========================================= */
+.hero {
+  background-color: var(--color-bg-alt);
+  padding: 60px 0;
+  /* На мобильном по умолчанию центрируем */
+  text-align: center; 
+}
+
+.hero__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.hero__subtitle {
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* =========================================
+   5. Features (Преимущества)
+   ========================================= */
+.features {
+  background-color: var(--color-bg);
+}
+
+.features__grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Мобильный: 1 колонка */
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--color-bg-alt);
+  padding: 30px 20px;
+  border-radius: var(--border-radius);
+  position: relative; /* Для позиционирования ссылки внизу */
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+}
+
+.feature-card__icon {
+  margin-bottom: 20px;
+}
+
+.feature-card__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.feature-card__text {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  flex-grow: 1; /* Толкает ссылку вниз */
+}
+
+.feature-card__link {
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-card__link:hover {
+  color: var(--color-primary);
+}
+
+.feature-card__link .arrow {
+  transition: transform 0.3s ease;
+}
+
+.feature-card__link:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* =========================================
+   6. How it works (Как это работает)
+   ========================================= */
+.how-it-works {
+  background-color: var(--color-bg);
+}
+
+.steps__grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Мобильный: 1 колонка */
+  gap: 40px 20px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+}
+
+.step__text {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  max-width: 250px;
+}
+
+/* =========================================
+   7. Живой пример (Comparison Slider)
+   ========================================= */
+.example {
+  background-color: var(--color-bg-alt);
+  text-align: center;
+}
+
+.example__description {
+  margin-bottom: 40px;
+  color: var(--color-text-light);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comparison-slider {
+  position: relative;
+  width: 100%;
+  max-width: 560px; /* Подгони под ширину картинки в макете */
+  aspect-ratio: 4 / 3; 
+  margin: 0 auto 50px;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  cursor: ew-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  background-color: #e0e0e0; /* Фон на случай долгой загрузки картинок */
+}
+
+.comparison-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.comparison-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Верхнее изображение обрезается. 50% по умолчанию */
+.comparison-image--after {
+  clip-path: inset(0 50% 0 0); 
+}
+
+.slider-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%; 
+  width: 4px;
+  background-color: var(--color-primary);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.handle-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 2px solid var(--color-primary);
+  border-radius: 50%;
+  pointer-events: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2368B738' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='15 18 9 12 15 6'%3E%3C/polyline%3E%3Cpolyline points='9 18 15 12 9 6'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.example__stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-item__value {
+  font-family: var(--font-heading);
+  font-size: 2.5rem; /* Чуть крупнее, как в макете */
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.stat-item__label {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+}
+
+/* =========================================
+   8. Контакты и Карта
+   ========================================= */
+.contacts {
+  background-color: var(--color-bg);
+  padding-bottom: 0; /* Карта часто прилипает к низу или футеру */
+}
+
+.contacts__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 60px; /* Отступ до футера */
+}
+
+.contacts__info {
+  font-style: normal;
+}
+
+.address__text {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  max-width: 300px;
+}
+
+.address__phone, .address__email {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.contacts__info a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.3);
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.contacts__info a:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.contacts__map {
+  width: 100%;
+  height: 400px;
+  background-color: var(--color-bg-alt);
+}
+
+/* =========================================
+   9. Footer
+   ========================================= */
+.footer {
+  background-color: var(--color-bg-dark);
+  padding: 40px 0;
+  text-align: center;
+}
+
+.footer__copyright {
+  color: #ffffff;
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* =========================================
+   10. АДАПТИВНОСТЬ (Media Queries)
+   ========================================= */
+
+/* --- ПЛАНШЕТ (от 768px) --- */
+@media (min-width: 768px) {
+  .section {
+    padding: 80px 0;
+  }
+
+  .section__title {
+    font-size: 3.5rem;
+  }
+
+  /* Hero: текст слева, картинка справа (если в макете так) */
+  .hero__container {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .hero__content {
+    max-width: 50%;
+  }
+
+  .hero__title {
+    font-size: 4rem; /* Крупный заголовок как в макете */
+  }
+
+  /* Features: ИСПРАВЛЕНО - теперь 2 колонки, а не 3 */
+  .features__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .feature-card {
+    padding: 40px 30px;
+  }
+
+  /* How it works: 2 колонки на планшете */
+  .steps__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px 40px;
+  }
+
+  /* Контакты: текст слева, карта справа */
+  .contacts__wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .contacts__info {
+    flex: 0 0 300px; /* Фиксированная ширина блока с адресом */
+  }
+  
+  .contacts__map {
+    flex: 1;
+    height: 400px;
+  }
+}
+
+/* --- ДЕСКТОП (от 1200px) --- */
+@media (min-width: 1200px) {
+  /* How it works: 4 колонки в ряд */
+  .steps__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 80px;
+  }
+  
+  .hero__title {
+    font-size: 5rem; /* Максимальный размер для больших экранов */
+  }
+}
+
+/* --- МОБИЛЬНЫЙ (до 767px) --- */
+@media (max-width: 767px) {
+  /* Скрываем обычную навигацию. 
+     ПРИМЕЧАНИЕ: Если в макете есть иконка "бургер", 
+     здесь нужно будет добавить её отображение и JS для меню */
+  .nav {
+    display: none; 
+  }
+  
+  .section__title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
+
+  .example__stats {
+    gap: 30px;
+  }
+  
+  .stat-item__value {
+    font-size: 2rem;
+  }
+}
+
+/* Стили для бургер-кнопки */
+.burger {
+  display: none; /* Скрыта на десктопе */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 101;
+}
+
+.burger__line {
+  width: 100%;
+  height: 3px;
+  background-color: #000000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Мобильная адаптация меню */
+@media (max-width: 767px) {
+  .burger {
+    display: flex; /* Показываем бургер на мобильном */
+  }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    
+    /* Скрываем меню по умолчанию */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+  }
+
+  /* Класс, который добавляет JS при клике */
+  .nav.nav--open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav__list {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .nav__link {
+    font-size: 1.2rem;
+  }
+
+  /* Анимация превращения бургера в крестик */
+  .burger--active .burger__line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .burger--active .burger__line:nth-child(2) {
+    opacity: 0;
+  }
+  .burger--active .burger__line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
