@@ -1,84 +1,70 @@
 document.addEventListener('DOMContentLoaded', () => {
-  initBurgerMenu();
-  initComparisonSlider();
-  initYandexMap();
+    initBurgerMenu();
+    initComparisonSlider();
+    initYandexMap();
 });
 
-// 1. Логика бургер-меню
+// 1. Бургер-меню
 function initBurgerMenu() {
-  const burger = document.getElementById('burger');
-  const nav = document.getElementById('nav');
-  
-  if (burger && nav) {
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('nav');
+    if (!burger || !nav) return;
+
     burger.addEventListener('click', () => {
-      nav.classList.toggle('nav--open');
-      burger.classList.toggle('burger--active');
+        burger.classList.toggle('burger--active');
+        nav.classList.toggle('nav--open');
     });
-  }
 }
 
-// 2. Логика слайдера До/После
+// 2. Интерактивный слайдер «Было / Стало»
 function initComparisonSlider() {
-  const slider = document.getElementById('comparison-slider');
-  if (!slider) return;
+    const rangeInput = document.querySelector('.slider__range-hidden');
+    const imgBefore = document.querySelector('.slider__img--before');
+    const imgAfter = document.querySelector('.slider__img--after');
+    const thumb = document.querySelector('.slider__thumb');
 
-  const afterImage = document.getElementById('after-image');
-  const handle = document.getElementById('slider-handle');
-  
-  let isDragging = false;
+    if (!rangeInput || !imgBefore || !imgAfter || !thumb) return;
 
-  const updateSlider = (clientX) => {
-    const rect = slider.getBoundingClientRect();
-    let position = ((clientX - rect.left) / rect.width) * 100;
-    position = Math.max(0, Math.min(100, position));
-    
-    afterImage.style.clipPath = `inset(0 ${100 - position}% 0 0)`;
-    handle.style.left = `${position}%`;
-  };
+    const updateSlider = (value) => {
+        // 1. Толстый кот ("Было"): от 0% (виден весь) до 100% (полностью скрыт)
+        imgBefore.style.clipPath = `inset(0 ${value}% 0 0)`;
+        
+        // 2. Худой кот ("Стало"): от 100% (полностью скрыт) до 0% (виден весь)
+        imgAfter.style.clipPath = `inset(0 0 0 ${100 - value}%)`;
+        
+        // 3. Синхронно двигаем кружочек по треку
+        thumb.style.left = value + '%';
+    };
 
-  const startDrag = (e) => {
-    isDragging = true;
-    e.preventDefault();
-  };
+    // Устанавливаем начальное положение (при value = 50)
+    updateSlider(rangeInput.value);
 
-  const stopDrag = () => {
-    isDragging = false;
-  };
-
-  const onMove = (e) => {
-    if (!isDragging) return;
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    updateSlider(clientX);
-  };
-
-  slider.addEventListener('mousedown', startDrag);
-  window.addEventListener('mouseup', stopDrag);
-  window.addEventListener('mousemove', onMove);
-
-  slider.addEventListener('touchstart', startDrag, { passive: false });
-  window.addEventListener('touchend', stopDrag);
-  window.addEventListener('touchmove', onMove, { passive: false });
+    // Слушаем движение ползунка
+    rangeInput.addEventListener('input', (event) => {
+        updateSlider(event.target.value);
+    });
 }
 
-// 3. Логика Яндекс.Карты
+// 3. Яндекс.Карта
 function initYandexMap() {
-  if (typeof ymaps === 'undefined') return;
+    if (typeof ymaps === 'undefined') return;
 
-  ymaps.ready(() => {
-    const myMap = new ymaps.Map('yandex-map', {
-      center: [55.751574, 37.573856], // Координаты Москвы (замени на свои)
-      zoom: 15,
-      controls: ['zoomControl']
+    ymaps.ready(() => {
+        const myMap = new ymaps.Map('yandex-map', {
+            center: [59.938631, 30.323037], // Координаты СПб, Б. Конюшенная
+            zoom: 16,
+            controls: ['zoomControl']
+        });
+
+        const myPlacemark = new ymaps.Placemark([59.936666, 30.323555], {
+            balloonContent: 'г. Санкт-Петербург, ул. Большая Конюшенная, д. 19/8'
+        }, {
+            iconLayout: 'default#image',
+            iconImageHref: 'assets/images/geometka.png', 
+            iconImageSize: [36, 36]
+        });
+
+        myMap.geoObjects.add(myPlacemark);
+        myMap.behaviors.disable('scrollZoom');
     });
-
-    const myPlacemark = new ymaps.Placemark([55.751574, 37.573856], {
-      hintContent: 'Cat Energy',
-      balloonContent: 'г. Москва, ул. Примерная, д. 1'
-    }, {
-      preset: 'islands#greenDotIcon'
-    });
-
-    myMap.geoObjects.add(myPlacemark);
-    myMap.behaviors.disable('scrollZoom');
-  });
 }
