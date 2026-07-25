@@ -143,30 +143,7 @@ ul, ol {
 }
 
 /* =========================================
-   3. HEADER
-   ========================================= */
-/* =========================================
-   HEADER
-   ========================================= */
-/* Общий контейнер для хедера и hero, задающий фоновую картинку на всю правую половину с самого верха */
-/* Общий контейнер для хедера и hero с фоновой фотографией на всю правую половину */
-/* Общий контейнер для хедера и hero с фоновой фотографией на всю правую половину */
-/* Общий контейнер для хедера и hero с фоновой фотографией на всю правую половину */
-/* Общий контейнер */
-/* =========================================
-   ОБЩИЕ СТИЛИ И МОБИЛЬНАЯ ВЕРСИЯ (< 768px)
-   ========================================= */
-/* =========================================
-   1. HEADER & HERO (Мобильная версия по умолчанию)
-   ========================================= */
-/* =========================================
-   1. МОБИЛЬНАЯ ВЕРСИЯ (< 768px)
-   ========================================= */
-/* /* =========================================
-   1. МОБИЛЬНАЯ ВЕРСИЯ (< 768px)
-   ========================================= */
-/* =========================================
-   ОБЕРТКА
+   3. HEADER И HERO — мобильная версия (< 768px) по умолчанию
    ========================================= */
 .site-wrapper {
   position: relative;
@@ -257,6 +234,10 @@ ul, ol {
 
 .nav__link:last-child {
   border-bottom: 1px solid #E6E6E6;
+}
+
+.nav__link--active {
+  border-bottom: 2px solid var(--color-primary);
 }
 
 /* =========================================
@@ -351,7 +332,19 @@ ul, ol {
     border-bottom: none;
     padding: 25px 0;
   }
+  .header__container {
+    /* страховка: если ширины всё равно не хватит, меню уйдёт на новую строку,
+       а не вылезет за пределы контейнера */
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
   .burger { display: none; }
+  .logo img,
+  .logo svg {
+    /* на мобильном логотип масштабируется сильнее (1.15), на планшете
+       это + 3 пункта меню уже не помещаются в одну строку — уменьшаем */
+    transform: scale(1);
+  }
   .nav {
     position: static;
     width: auto;
@@ -364,70 +357,87 @@ ul, ol {
   .nav__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 35px;
+    gap: clamp(16px, 3vw, 35px);
   }
   .nav__link {
-    font-size: 18px;
+    font-size: clamp(15px, 1.8vw, 18px);
     padding: 10px 0;
     border: none;
+    white-space: nowrap;
   }
 
-  /* Hero для планшета */
+  /* Hero для планшета — координаты из Figma (кадр 768px), переведены в %
+     от ширины .hero__wrapper, чтобы раскладка "расходилась" на широких
+     планшетах, а не просто стояла по центру с пустыми полями по бокам.
+     Высота шапки над hero ≈ 90px, поэтому top ниже — это (Figma − 90). */
   .hero {
-    padding-top: 50px;
+    padding-top: 0;
     padding-bottom: 50px;
   }
-  
+
   .hero::before {
-    display: none; /* Убираем зеленый фон */
+    display: none; /* На планшете фона-картинки нет вообще — версия полностью белая (см. референс) */
   }
 
   .hero__wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1300px;
+    position: relative;
+    width: 100%;
+    max-width: 1100px; /* тянется вместе с окном, но не бесконечно */
+    height: 900px;
     margin: 0 auto;
-    padding: 0 30px; 
   }
 
   .hero__container {
+    position: absolute;
+    z-index: 2; /* поверх картинки, чтобы текст не перекрывался */
+    top: 50px;         /* Figma: 140 − 90 */
+    left: 15.23%;       /* Figma: 117 / 768 */
+    width: 53.906%;     /* Figma: 414 / 768 */
     padding: 0 !important;
     text-align: left;
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    align-self: end;
-    padding-bottom: 30px !important;
   }
 
   .hero__title {
-    font-size: 44px;
+    font-size: 60px;
+    line-height: 60px;
     color: #000000;
-    max-width: 400px;
+    margin-bottom: 41px; /* Figma: низ заголовка 260 → верх подзаголовка 301 */
+    white-space: nowrap; /* "Функциональное" и "питание для котов" не должны рваться иначе */
   }
 
   .hero__subtitle {
-    font-size: 18px;
+    width: auto;
+    white-space: nowrap; /* фикс переноса "КОТОМ!" на новую строку */
+    font-size: 20px;
+    line-height: 20px;
     color: #000000;
+    margin-bottom: 0;
   }
 
   .hero__button {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
+    position: absolute;
+    z-index: 2; /* поверх картинки */
+    top: 280px;        /* Figma: 370 − 90 */
+    left: 14.583%;      /* Figma: 112 / 768 */
     margin: 0;
     width: auto;
-    justify-self: start;
-    align-self: start;
   }
 
   .hero__image-wrapper {
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
-    margin: 0; 
+    position: absolute;
+    z-index: 1; /* под текстом и кнопкой */
+    top: 251px;         /* Figma: 341 − 90 */
+    left: 3.776%;        /* Figma: 29 / 768 */
+    width: 92.317%;      /* Figma: 709 / 768 */
+    aspect-ratio: 709 / 609; /* высота растёт вместе с шириной, без искажений */
+    margin: 0;
   }
 
   .hero__product {
-    max-width: 380px;
     width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: contain;
   }
 }
 
@@ -436,126 +446,241 @@ ul, ol {
    ДЕСКТОП ВЕРСИЯ (от 1300px)
    ========================================= */
 /* =========================================
-   3. ДЕСКТОП ВЕРСИЯ (от 1300px)
+ДЕСКТОП ВЕРСИЯ (от 1300px)
+========================================= */
+/* =========================================
+   ДЕСКТОП ВЕРСИЯ (от 1300px)
+   ========================================= */
+/* =========================================
+   ДЕСКТОП ВЕРСИЯ (от 1300px)
+   ========================================= */
+/* =========================================
+   ДЕСКТОП ВЕРСИЯ (от 1300px)
    ========================================= */
 @media (min-width: 1300px) {
-  .site-wrapper {
-    min-height: 100vh;
-    background-color: #FFFFFF;
-    overflow: visible;
-    position: relative;
-  }
+    .site-wrapper {
+        min-height: 100vh;
+        background-color: #FFFFFF;
+        overflow: visible;
+        position: relative;
+    }
+    
+    /* Зеленый фон справа */
+    .site-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 696px;
+        background-image: url('assets/images/index-background-desktop.svg');
+        background-repeat: no-repeat;
+        background-position: top right;
+        background-size: cover;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    .hero::before {
+        display: none !important;
+    }
 
-  /* ОТКЛЮЧАЕМ СТАРЫЙ ПСЕВДОЭЛЕМЕНТ ПОЛНОСТЬЮ */
-  .hero::before {
-    display: none !important;
-  }
+    /* =========================================
+    ШАПКА (HEADER)
+    ========================================= */
+    .header {
+        border-bottom: none;
+        padding: 0;
+        background-color: transparent;
+        position: relative;
+        z-index: 2;
+        height: 120px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .header__container {
+        max-width: 1440px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 40px;
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .logo {
+        position: relative;
+        left: auto;
+        top: auto;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .logo img,
+    .logo svg {
+        transform: none;
+        width: auto;
+        height: 52px;
+        max-width: 174px;
+    }
+    
+    .burger {
+        display: none !important;
+    }
+    
+    .nav {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: auto;
+        background: transparent;
+        border: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        display: flex;
+        align-items: center;
+    }
+    
+    .nav__list {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 40px;
+        align-items: center;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .nav__link {
+        font-family: var(--font-heading);
+        font-size: 18px;
+        font-weight: 400;
+        text-transform: uppercase;
+        color: #FFFFFF;
+        padding: 10px 0;
+        border: none;
+        white-space: nowrap;
+        position: relative;
+        transition: color 0.3s ease, opacity 0.3s ease;
+        background: transparent;
+    }
+    
+    .nav__link--active {
+        border-bottom: 2px solid var(--color-primary);
+    }
+    
+    .nav__link:hover {
+        opacity: 0.7;
+    }
 
-  /* НОВЫЙ ФОН ЧЕРЕЗ SITE-WRAPPER — ПРИВЯЗАН К ЭКРАНУ */
-  .site-wrapper::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 50vw;
-    height: 100vh;
-    background-image: url('assets/images/index-background-desktop.svg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 0;
-    pointer-events: none;
-  }
+    /* =========================================
+    БЛОК HERO (ИСПРАВЛЕН)
+    ========================================= */
+    .hero {
+        min-height: 696px;
+        padding: 0;
+        width: 100%;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+        overflow: visible;
+        margin-top: -120px;
+    }
+    
+    .hero__wrapper {
+        position: relative;
+        max-width: 1440px;
+        height: 696px;
+        margin: 0 auto;
+        padding: 0;
+        z-index: 1;
+    }
+    
+    /* ---------- КОНТЕЙНЕР С ТЕКСТОМ (РАСШИРЕН) ---------- */
+    .hero__container {
+        position: absolute;
+        left: 130px; /* Сдвинули левее на 60px (было 190px) */
+        top: 223px;
+        width: 550px; /* Увеличили ширину (было 414px) */
+        text-align: left;
+        padding: 0 !important;
+        margin: 0;
+        z-index: 2;
+    }
+    
+    .hero__title {
+        font-family: var(--font-heading);
+        font-size: 60px;
+        line-height: 60px;
+        color: #000000;
+        margin-bottom: 40px;
+        max-width: 550px; /* Увеличили до ширины контейнера */
+        font-weight: 400;
+    }
+    
+    /* ---------- ПОДЗАГОЛОВОК (ТЕПЕРЬ В ОДНУ СТРОКУ) ---------- */
+    .hero__subtitle {
+        font-family: var(--font-heading);
+        font-size: 20px;
+        line-height: 20px;
+        color: #000000;
+        margin-bottom: 0;
+        text-transform: uppercase;
+        font-weight: 400;
+        white-space: nowrap; /* Принудительно в одну строку */
+        display: inline-block; /* Чтобы ширина была по содержимому */
+    }
+    
+    /* ---------- КНОПКА (СДВИНУТА ВСЛЕД ЗА ТЕКСТОМ) ---------- */
+    .hero__button {
+        position: absolute;
+        left: 130px; /* Сдвинули левее на 60px (было 190px) */
+        top: 443px;
+        margin: 0;
+        z-index: 2;
+        font-family: var(--font-heading);
+        font-size: 20px;
+        text-transform: uppercase;
+        padding: 14px 26px;
+        background-color: var(--color-primary);
+        color: #FFFFFF;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+        min-width: 244px;
+        text-align: center;
+    }
+    
+    .hero__button:hover {
+        background-color: var(--color-primary-hover);
+    }
 
-  .header {
-    border-bottom: none;
-    padding: 50px 0;
-    background-color: transparent;
-    position: relative;
-    z-index: 2;
-  }
-  .burger { display: none; }
-  .nav {
-    position: static;
-    width: auto;
-    background: transparent;
-    border: none;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-  .nav__list { display: flex; flex-wrap: nowrap; gap: 20px; }
-  .nav__link { font-size: 18px; color: #FFFFFF; padding: 10px 0; border: none; white-space: nowrap; }
-  .nav__link--active { border-bottom: 2px solid #FFFFFF; }
-
-  .hero {
-    min-height: 100vh;
-    padding-bottom: 110px;
-    padding-top: 60px;
-    width: 100%;
-    height: auto;
-    margin: 0;
-    position: relative;
-    z-index: 1;
-    overflow: visible;
-  }
-
-  .hero__wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 40px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero__container {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    text-align: left;
-    align-self: end;
-    padding: 0 !important;
-    margin: 0;
-  }
-
-  .hero__title {
-    font-size: 60px;
-    color: #000000;
-    margin-bottom: 40px;
-    max-width: 450px;
-  }
-
-  .hero__subtitle {
-    font-size: 20px;
-    color: #000000;
-    margin-bottom: 0;
-  }
-
-  .hero__button {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-    justify-self: start;
-    align-self: start;
-    margin-top: 50px;
-  }
-
-  .hero__image-wrapper {
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
-    position: relative;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  .hero__product {
-    max-width: 552px;
-    width: 100%;
-    height: auto;
-    transform: translateX(-80px);
-  }
+    /* ---------- ИЗОБРАЖЕНИЕ (БЕЗ ИЗМЕНЕНИЙ) ---------- */
+    .hero__image-wrapper {
+        position: absolute;
+        left: 558px;
+        top: 141px;
+        width: 552px;
+        height: 499px;
+        margin: 0;
+        z-index: 1;
+    }
+    
+    .hero__product {
+        max-width: 552px;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transform: none;
+        display: block;
+    }
 }
+
 /* =========================================
    4. FEATURES
    ========================================= */
@@ -955,10 +1080,22 @@ ul, ol {
 .slider__image-container {
   position: relative;
   width: 100%;
-  max-width: 560px;
+  max-width: 335px; /* мобильная версия — компактный размер */
   aspect-ratio: 560 / 512;
   margin: 0 auto 30px;
   overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .slider__image-container {
+    max-width: 420px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .slider__image-container {
+    max-width: 560px;
+  }
 }
 
 .slider__img {
@@ -1138,6 +1275,9 @@ ul, ol {
 /* =========================================
    9. FOOTER
    ========================================= */
+/* =========================================
+   9. FOOTER
+   ========================================= */
 .footer {
   background-color: var(--color-bg-alt);
   padding: 40px 0;
@@ -1168,42 +1308,43 @@ ul, ol {
   height: auto;
 }
 
+/* ===== ИСПРАВЛЕНО: СОЦИАЛЬНЫЕ СЕТИ ===== */
 .footer__socials {
   display: flex;
   gap: 20px;
-  width: 100%;
-  justify-content: center;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  padding: 20px 0;
-}
-
-@media (min-width: 768px) {
-  .footer__socials {
-    width: auto;
-    border: none;
-    padding: 0;
-  }
+  align-items: center;
+  padding: 0;
+  border: none;
+  width: auto;
 }
 
 .socials__link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  transition: opacity 0.3s ease;
+  width: 28px;  /* Уменьшил размер */
+  height: 28px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  border-radius: 0; /* Убрал скругление */
+  background: transparent; /* Убрал фон */
 }
 
 .socials__link img {
+  width: 100%;
+  height: auto;
+  max-width: 28px;
+  max-height: 28px;
+  display: block;
   opacity: 0.6;
+  filter: brightness(0) saturate(100%) invert(0%); /* Делает иконки черными */
 }
 
 .socials__link:hover img {
   opacity: 1;
+  transform: scale(1.1);
 }
 
+/* ===== HTML ACADEMY ===== */
 .footer__developer {
   display: flex;
   align-items: center;
@@ -1247,4 +1388,22 @@ ul, ol {
 }
 .burger--active .burger__line:nth-child(3) {
   transform: translateY(-11px) rotate(-45deg);
+}
+
+.nav__link {
+    border-bottom: none !important;
+}
+
+/* Подчеркивание ТОЛЬКО у активной ссылки */
+.nav__link--active {
+    border-bottom: 2px solid var(--color-primary) !important;
+    padding-bottom: 6px;
+}
+
+/* На десктопе подчеркивание активной ссылки белым */
+@media (min-width: 1300px) {
+    .nav__link--active {
+        border-bottom: 2px solid #FFFFFF !important;
+        padding-bottom: 6px;
+    }
 }
